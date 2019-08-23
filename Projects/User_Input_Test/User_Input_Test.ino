@@ -10,7 +10,7 @@ void setup() {
 
 void loop() {
  recvOneChar();
- showNewData();
+ //showNewData();
 }
 
 void recvOneChar() {
@@ -20,13 +20,7 @@ void recvOneChar() {
  }
 }
 
-void showNewData() {
- if (newData == true) {
- Serial.print("This just in ... ");
- Serial.println(receivedChar);
- newData = false;
- }
-}
+
 
 void recvWithEndMarker() {
  /*static byte ndx = 0;
@@ -52,7 +46,7 @@ void recvWithEndMarker() {
  char finisher='\n';
  char readed;
 
- while(Serial.available>0&&newData==false) {
+ while(Serial.available()>0&&newData==false) {
   readed=Serial.read();
 
   if(readed!=finisher) {
@@ -66,6 +60,8 @@ void recvWithEndMarker() {
   }
   else {
     recievedChars[indx]='\0';
+    indx=0;
+    newData=true;
     
   }
  }
