@@ -3,9 +3,8 @@
 char receivedChar;
 const byte numChars = 32;
 boolean newData = false;
-static char receivedChars[numChars];
-
-const int ledPin=5;
+char receivedChars[numChars];
+const int ledPin=4;
 const int dashs=1500;
 const int dots=500;
 const int offTime=1000;
@@ -26,16 +25,19 @@ void setup() {
   pinMode(ledPin,OUTPUT);
   
   Serial.println("Please enter what you'd like to say");
-  recvOneChar();
+  
+ recvString();
+ 
   
 }
 
 void loop() {
+  recvString();
+ showNewData();
   // put your main code here, to run repeatedly:
   static byte counter=0;
   
- recvOneChar();
- showNewData();
+ //
   //a();
 }
 boolean dot() {
@@ -47,8 +49,9 @@ boolean dot() {
   return true;
 }
 
-void showNewData() {
+void determineLetter(){
  if (newData == true) {
+  Serial.println("Hetlo");
   if(receivedChar=='a') {
     a();
   }
@@ -71,6 +74,7 @@ void showNewData() {
     g();
   }
   if(receivedChar=='h') {
+    Serial.println("CHAR RECEIVED");
     h();
   }if(receivedChar=='i') {
     i();
@@ -108,10 +112,16 @@ void showNewData() {
     y();
   }if(receivedChar=='z') {
     z();
-  }
-  Serial.println(receivedChar);
-  newData = false;
+  } 
+}
+}
+
+void showNewData() {
+ for (int i = 0; i < 32; i++) {
+  receivedChar=receivedChars[i];
+  determineLetter();
  }
+  newData = false;
 }
 
 void recvOneChar() {
@@ -131,6 +141,28 @@ boolean dash() {
 }
 
 void recvString(){
+  byte indx=0;
+  char finisher='\n';
+  char whatRead;
+
+  while(Serial.available()>0&&newData==false){
+    whatRead=Serial.read();
+    if(whatRead!=finisher) {
+     receivedChars[indx]=whatRead;
+     indx++;
+
+      if(indx>=numChars) {
+        indx=numChars-1;
+      }
+    }
+    else{
+      receivedChars[indx]='\0';
+      indx=0;
+      newData=true;
+    }
+  }
+}
+/*void recvString(){
   static int indx=0;
   receivedChars[indx];
  char finisher='\n';
@@ -153,7 +185,7 @@ void recvString(){
     newData=true;
   }
  }
-}
+}*/
 
 boolean a() {
   dot();
