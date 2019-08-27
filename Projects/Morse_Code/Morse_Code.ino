@@ -4,7 +4,7 @@ char receivedChar;
 const byte numChars = 32;
 boolean newData = false;
 char receivedChars[numChars];
-const int ledPin=4;
+const int ledPin=5;
 const int dashs=1500;
 const int dots=500;
 const int offTime=1000;
@@ -131,6 +131,20 @@ void recvOneChar() {
  }
 }
 
+//https://startingelectronics.org/software/arduino/learn-to-program-course/19-serial-input/ for source of String input.
+
+char observed = 0;
+String rec_str="";
+
+void recvString(){
+ if(Serial.available()>0) {
+  observed=Serial.read();
+  //if(re
+  
+ }
+ newData=true;
+}
+
 boolean dash() {
   delay(offTime);
   digitalWrite(ledPin,HIGH);
@@ -140,28 +154,6 @@ boolean dash() {
   return true;
 }
 
-void recvString(){
-  byte indx=0;
-  char finisher='\n';
-  char whatRead;
-
-  while(Serial.available()>0&&newData==false){
-    whatRead=Serial.read();
-    if(whatRead!=finisher) {
-     receivedChars[indx]=whatRead;
-     indx++;
-
-      if(indx>=numChars) {
-        indx=numChars-1;
-      }
-    }
-    else{
-      receivedChars[indx]='\0';
-      indx=0;
-      newData=true;
-    }
-  }
-}
 /*void recvString(){
   static int indx=0;
   receivedChars[indx];
