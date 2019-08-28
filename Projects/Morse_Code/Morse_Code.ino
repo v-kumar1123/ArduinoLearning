@@ -3,12 +3,13 @@
 char receivedChar;
 const byte numChars = 32;
 boolean newData = false;
-char receivedChars[numChars];
 const int ledPin=5;
-const int dashs=1500;
-const int dots=500;
-const int offTime=1000;
-const int letterSwitch=3000;
+const int dashs=300;
+char observed = 0;
+String rec_str="";
+const int dots=100;
+const int offTime=250;
+const int letterSwitch=1000;
 
 /*
  * 
@@ -50,8 +51,7 @@ boolean dot() {
 }
 
 void determineLetter(){
- if (newData == true) {
-  Serial.println("Hetlo");
+  //Serial.println("Hetlo");
   if(receivedChar=='a') {
     a();
   }
@@ -74,7 +74,7 @@ void determineLetter(){
     g();
   }
   if(receivedChar=='h') {
-    Serial.println("CHAR RECEIVED");
+    //Serial.println("CHAR RECEIVED");
     h();
   }if(receivedChar=='i') {
     i();
@@ -114,13 +114,8 @@ void determineLetter(){
     z();
   } 
 }
-}
 
 void showNewData() {
- for (int i = 0; i < 32; i++) {
-  receivedChar=receivedChars[i];
-  determineLetter();
- }
   newData = false;
 }
 
@@ -133,15 +128,25 @@ void recvOneChar() {
 
 //https://startingelectronics.org/software/arduino/learn-to-program-course/19-serial-input/ for source of String input.
 
-char observed = 0;
-String rec_str="";
 
 void recvString(){
- if(Serial.available()>0) {
+ while(Serial.available()>0) {
   observed=Serial.read();
-  //if(re
+  if(observed!='\n'){
+    rec_str+=observed;
+    receivedChar=observed;
+    determineLetter();
+  }
+  else{
+    //Serial.println("I HAVE RECEIVED "+rec_str);
+   break; 
+  }
+
+  
   
  }
+ //return rec_str;
+ 
  newData=true;
 }
 
