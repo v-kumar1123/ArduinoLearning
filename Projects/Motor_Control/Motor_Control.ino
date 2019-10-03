@@ -1,24 +1,24 @@
-const int motorIn1 = 9; // the one pin of the motor attach to pin 9
-const int motorIn2 = 10; // the another pin of the motor attach to pin 10
-void setup()
-{
-pinMode(motorIn1,OUTPUT); //initialize the motorIn1 pin as output 
-pinMode(motorIn2,OUTPUT); //initialize the motorIn2 pin as output 
+#include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+#include "utility/Adafruit_MS_PWMServoDriver.h"
+Adafruit_MotorShield AFMS= Adafruit_MotorShield();
+Adafruit_DCMotor *myMotor=AFMS.getMotor(2);
+void setup() {
+  // put your setup code here, to run once:
+  
+  Serial.begin(9600);
+  Wire.begin();
+  AFMS.begin();
+  
+  
+  myMotor->setSpeed(150);
+  myMotor->run(FORWARD);
 }
-void loop()
-{
-clockwise(200); //rotate clockwise 
-delay(1000); //wait for a second
-counterclockwise(200); //rotate counterclockwise
-delay(1000); //wait for a second
-}
-void clockwise(int Speed)
-{
-analogWrite(motorIn1,Speed); //set the speed of motor
-analogWrite(motorIn2,0); //stop the motorIn2 pin of motor
-}
-void counterclockwise(int Speed)
-{
-analogWrite(motorIn1,0); //stop the motorIn1 pin of motor
-analogWrite(motorIn2,Speed); //set the speed of motor
+ 
+void loop() {
+  // put your main code here, to run repeatedly:
+  
+  myMotor->setSpeed(150);
+  myMotor->run(FORWARD);
 }

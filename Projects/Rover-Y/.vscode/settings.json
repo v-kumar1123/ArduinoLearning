@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.env.windows": {
+        "PATH": "C:\\Users\\othscs164\\.platformio\\penv\\Scripts;C:\\Users\\othscs164\\.platformio\\penv;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\Common Files\\Netop\\;C:\\Program Files (x86)\\Netop\\Vision\\XL\\;C:\\Program Files\\Git\\cmd;C:\\Users\\othscs164\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\Users\\othscs164\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Program Files (x86)\\Common Files\\Oracle\\Java\\javapath;C:\\ProgramData\\Oracle\\Java\\javapath;C:\\windows\\system32;C:\\windows;C:\\windows\\System32\\Wbem;C:\\windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\Common Files\\Netop\\;C:\\Program Files (x86)\\Netop\\Vision\\XL\\;C:\\Program Files\\Git\\cmd;C:\\Users\\othscs164\\AppData\\Local\\Microsoft\\WindowsApps;;C:\\Users\\othscs164\\AppData\\Local\\Programs\\Microsoft VS Code\\bin",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
