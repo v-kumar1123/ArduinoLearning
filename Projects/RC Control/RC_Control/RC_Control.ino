@@ -1,43 +1,53 @@
+//add the servo libary
 #include <Servo.h>
-// Arduino pin numbers
-const int SW_pin = 2; // digital pin connected to switch output
-const int X_pin = 0; // analog pin connected to X output
-const int Y_pin = 1; // analog pin connected to Y output
-Servo servo;
+#include <Arduino.h>
+#include <Wire.h>
+#include <Adafruit_MotorShield.h>
+#include "utility/Adafruit_MS_PWMServoDriver.h"
+Adafruit_MotorShield AFMS= Adafruit_MotorShield();
+Adafruit_DCMotor *myMotor=AFMS.getMotor(1);
 
-void setup() {
-  pinMode(SW_pin, INPUT);
-  digitalWrite(SW_pin, HIGH);
+Servo servo1;
+
+int joyX = 0;
+int joyY = 1;
+
+int joyValY;
+int joyValX;
+void setup ()
+{
+  servo1.attach(10);
   Serial.begin(9600);
-  servo.attach(12);
-  servo.write(90);
+  Wire.begin();
+  AFMS.begin();
+  servo1.write(0);
 }
 
-void loop() {
-  int x= analogRead(X_pin);
-  int y= analogRead(Y_pin);
-
-  int valX = map(x, 1023, 0, 10, 170);
-  int valY = map(y, 0, 1023, 10, 170);
-  servo.write(valX);
-
-  delay(5);
-
-  /*if(x==522){
-    servo.write(90);
+void loop ()
+{
+  
+  joyValY = analogRead(joyY);//Y-Position, will determine motor speed
+  myMotor->setSpeed(90);
+  servoWrite();
+  //Joystick Pushed Forward
+  if(joyValY>523){
+    //Motor runs forward
+    myMotor->run(FORWARD);
   }
-  if(x>523) {
-    Serial.println("Right");
-    servo.write(180);
+  //Joystick at rest, no push backwards or forward
+  if(joyValY>501&&joyValY<523){
+    //Motor stops
+    myMotor->setSpeed(0);
+    myMotor->run(RELEASE);
   }
-  if(x<521){
-    Serial.println("Left:");
-    servo.write(250);
+  //Joystick pushed forward
+  if(joyValY<501){
+    //Motor runs backward
+    myMotor->run(BACKWARD);
   }
-  if(y>509) {
-    Serial.println("Backward");
-  }
-  if(y<505){
-    Serial.println("Forward");
-  }*/
+}
+void servoWrite() {
+  joyValX = analogRead(joyX);//X-Position, determines servo direction
+  joyValX = map(joyValX, 0, 1023, 0, 180); //Maps Joystick value to be from 0 to 180
+  servo1.write(joyValX);//Servo direction write
 }
