@@ -28,8 +28,14 @@ void loop ()
 {
   
   joyValY = analogRead(joyY);//y-position, will determine motor speed
-  myMotor->setSpeed(90);
-  servoWrite();
+  
+  int speed= map(joyValY, 0, 1023, 0, 150); //maps JoystickW value to be from 0 to 150
+  speed=speed-74;//sets speed value scaled
+  speed*=2;//multiply by 2 to increase speed
+  speed=abs(speed);//makes speed value to be defaultly positive
+  Serial.println(speed);//notifies me of speed
+  myMotor->setSpeed(speed);//sets speed of motor to scaled speed
+  servoWrite();//sets servo value
   //joystick pushed forward
   if(joyValY>523){
     //motor runs forward
@@ -50,5 +56,6 @@ void loop ()
 void servoWrite() {
   joyValX = analogRead(joyX);//x-position, determines servo direction
   joyValX = map(joyValX, 0, 1023, 0, 180); //maps Joystick value to be from 0 to 180
+  //Serial.println(joyValX);//TEMPORARY- tells what # is made
   servo1.write(joyValX);//servo direction written
 }
