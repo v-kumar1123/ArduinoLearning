@@ -51,21 +51,21 @@ void messageFormat() {
 }
 
 char[] directionDetermine() {
-//  if(joyValY>523){
-//    //motor runs forward
-//    myMotor->run(FORWARD);
-//  }
-//  //joystick at rest, not pushed backwards nor forward
-//  if(joyValY>501&&joyValY<523){
-//    //motor stops
-//    myMotor->setSpeed(0);
-//    myMotor->run(RELEASE);
-//  }
-//  //joystick pushed backward
-//  if(joyValY<501){
-//    //motor runs backward
-//    myMotor->run(BACKWARD);
-//  }
+  if(joyValY>523){
+    //motor runs forward
+    myMotor->run(FORWARD);
+  }
+  //joystick at rest, not pushed backwards nor forward
+  if(joyValY>501&&joyValY<523){
+    //motor stops
+    myMotor->setSpeed(0);
+    myMotor->run(RELEASE);
+  }
+  //joystick pushed backward
+  if(joyValY<501){
+    //motor runs backward
+    myMotor->run(BACKWARD);
+  }
 }
 
 void speedRead() {   
