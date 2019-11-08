@@ -6,6 +6,8 @@
  * The message will be formatted in this class and will be received in the receiver class, called Radio_Action
  */
 
+
+//11/8/19: fix radio code, using new code and fix String format error. CHECK THE COMPILE MESSAGES
 #include <RH_ASK.h>
 #include <SPI.h>
 //add the servo libary
@@ -26,6 +28,7 @@ int joyValY;//y-position
 int joyValX;//x-position
 int servoPos;
 int carSpeed;
+String direccion="";
 
 const char *message="RELEASE:0:0";//message to send receiver
 RH_ASK driver;
@@ -34,37 +37,44 @@ void setup() {
   servo1.attach(10);//servo attachment position
   servo1.write(0);//servo to 0 position
   Serial.begin(9600);//(console initiation)
-  if(!driver.init){
+  if(!driver.init()){
     Serial.println("FAILED!!");
   }
 }
 void loop() {
   messageFormat();
-  driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(msg)/*length of the String*/);//sends message to receiver
+  driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
   driver.waitPacketSent();
   delay(5);
 }
 
 void messageFormat() {
-  speedRead();
+  //The format of the message: "DIRECTION(Forward, Backward, or Straight):SPEED:SERVOVALUE"
+  speedRead();//speed of car, 0-150, sets carSpeed variable to speed
+  String direccion=directionDetermine();//says which way car should drive
+  servoPosition();//gives position of servo, sets servoPos variable to position
+
+  message=direccion+":"+carSpeed+":"servoPos;
+
+  return;
   
 }
 
-char[] directionDetermine() {
+String directionDetermine() {
   if(joyValY>523){
     //motor runs forward
-    myMotor->run(FORWARD);
+    return "FORWARD";
   }
   //joystick at rest, not pushed backwards nor forward
   if(joyValY>501&&joyValY<523){
     //motor stops
-    myMotor->setSpeed(0);
-    myMotor->run(RELEASE);
+    carSpeed=0;
+    return "RELEASE";
   }
   //joystick pushed backward
   if(joyValY<501){
     //motor runs backward
-    myMotor->run(BACKWARD);
+    return "BACKWARD";
   }
 }
 
