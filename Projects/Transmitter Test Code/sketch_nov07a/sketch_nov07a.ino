@@ -1,13 +1,3 @@
-/*
-  433 MHz RF Module Receiver Demonstration 1
-  RF-Rcv-Demo-1.ino
-  Demonstrates 433 MHz RF Receiver Module
-  Use with Transmitter Demonstration 1
- 
-  DroneBot Workshop 2018
-  https://dronebotworkshop.com
-*/
- 
 // Include RadioHead Amplitude Shift Keying Library
 #include <RH_ASK.h>
 // Include dependant SPI Library 

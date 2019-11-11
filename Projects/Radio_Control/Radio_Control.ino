@@ -22,7 +22,7 @@ Adafruit_DCMotor *myMotor=AFMS.getMotor(1);
 Servo servo1;
 
 int joyX = 0;//joystick pin for X direction for servos
-int joyY = 1;//joystick pin for Y direction for motors
+int joyY = 1;//joystick pin for Y direction for motors, joystick 2 plugs in here
 
 int joyValY;//y-position
 int joyValX;//x-position
@@ -31,20 +31,21 @@ int carSpeed;
 String direccion="";
 
 const char *message="RELEASE:0:0";//message to send receiver
-RH_ASK driver;
+// Create Amplitude Shift Keying Object
+RH_ASK Radio(2000,"",2);
 
 void setup() {
   servo1.attach(10);//servo attachment position
   servo1.write(0);//servo to 0 position
   Serial.begin(9600);//(console initiation)
-  if(!driver.init()){
+  if(!Radio.init()){
     Serial.println("FAILED!!");
   }
 }
 void loop() {
   messageFormat();
-  driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
-  driver.waitPacketSent();
+  Radio.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
+  Radio.waitPacketSent();
   delay(5);
 }
 
@@ -54,7 +55,7 @@ void messageFormat() {
   String direccion=directionDetermine();//says which way car should drive
   servoPosition();//gives position of servo, sets servoPos variable to position
 
-  message=direccion+":"+carSpeed+":"servoPos;
+  message=direccion+":"+carSpeed+":"+servoPos;
 
   return;
   
