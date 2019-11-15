@@ -28,12 +28,12 @@ int carSpeed;
 String direccion = "";
 
 char message[30] = "RELEASE:0:0"; //message to send receiver
-Create Amplitude Shift Keying Object
+//Create Amplitude Shift Keying Object
 RH_ASK Radio(2000,"", 2);
 
 void setup() {
   servo1.attach(10);//servo attachment position
-  servo1.write(0);//servo to 0 position
+  servo1.write(90);//servo to 0 position
   Serial.begin(9600);//(console initiation)
   if (!Radio.init()) {
     Serial.println("FAILED!!");
@@ -93,7 +93,7 @@ void speedRead() {
 }
 
 void servoPosition() {
-  //  joyValX = analogRead(joyX);//x-position, determines servo direction
-  //  joyValX = map(joyValX, 0, 1023, 0, 180); //maps Joystick value to be from 0 to 180
-  //  servoPos=joyValX;
+    joyValX = analogRead(joyX);//x-position, determines servo direction
+    joyValX = map(joyValX, 0, 1023, 0, 180); //maps Joystick value to be from 0 to 180
+    servoPos=joyValX;
 }
