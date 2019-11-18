@@ -18,6 +18,7 @@ Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
 
 Servo servo1;
 
+char message[150];
 int joyX = 0;//joystick pin for X direction for servos
 int joyY = 1;//joystick pin for Y direction for motors, joystick 2 plugs in here
 
@@ -27,7 +28,7 @@ int servoPos;
 int carSpeed;
 String direccion = "";
 
-char message[30] = "RELEASE:0:0"; //message to send receiver
+//char message[30] = "RELEASE:0:0"; //message to send receiver
 //Create Amplitude Shift Keying Object
 RH_ASK Radio(2000,"", 2);
 
@@ -43,29 +44,21 @@ void loop() {
   messageFormat();
   //  char __message[sizeof(message)];
   //  message.toCharArray(__message, sizeof(__message));
-//  Radio.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
-//  Radio.waitPacketSent();
+  Radio.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
+  Radio.waitPacketSent();
   delay(5);
 }
 
 void messageFormat() {
   //The format of the message: "DIRECTION(Forward, Backward, or Straight):SPEED:SERVOVALUE"
   speedRead();//speed of car, 0-150, sets carSpeed variable to speed
-  char *direccion = directionDetermine(); //says which way car should drive
   servoPosition();//gives position of servo, sets servoPos variable to position
-
-  strcpy(message, direccion);
-  strcat(message, ":");
-  message[strlen(direccion) + 1] = carSpeed + '0';
-  //  strcat(message,":");
-  //  strcat(message,servoPos+"");
-
-
+  message=directionDetermine()+":"+speedRead()+":"+servoPosition();
   return;
 
 }
 
-char *directionDetermine() {
+char directionDetermine() {
   if (joyValY > 523) {
     //motor runs forward
     return "FORWARD";
@@ -83,17 +76,22 @@ char *directionDetermine() {
   }
 }
 
-void speedRead() {
+char speedRead() {
   joyValY = analogRead(joyY);//y-position, will determine motor speed
   int speed = map(joyValY, 0, 1023, 0, 90); //maps JoystickW value to be from 0 to 150
   speed = speed - 74; //sets speed value scaled
   speed *= 2; //multiply by 2 to increase speed
   carSpeed = abs(speed); //makes speed value to be defaultly positive
-  carSpeed = carSpeed / 10;
+  char carSpeeder[15];
+  itoa(carSpeed, carSpeeder, 10);
+  return carSpeeder;
 }
 
-void servoPosition() {
+char servoPosition() {
     joyValX = analogRead(joyX);//x-position, determines servo direction
     joyValX = map(joyValX, 0, 1023, 0, 180); //maps Joystick value to be from 0 to 180
     servoPos=joyValX;
+    char servPosit[15];
+    itoa(servoPos, servPosit, 10);
+    return servoPosit;
 }
