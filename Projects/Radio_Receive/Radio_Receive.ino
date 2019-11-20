@@ -9,15 +9,24 @@
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
 
+RH_ASK Radio(2000,2);
+
+Servo servo1;
+
+
+
 //THIS CLASS IS MADE TO RECEIVE DATA FROM THE TRANSMITTER AND CONVEY TO THE MOTORS AND STUFF....really formal language here amirite?
 
 
-
+ 
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.rp
-
+  Serial.begin(9600);
+  if(!Radio.init()) {
+    Serial.println("DID NOT INIT CORRECTLY");
+    
+  }
 }
 
 void loop() {
