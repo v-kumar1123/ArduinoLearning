@@ -1,34 +1,43 @@
-#include <RH_ASK.h>;
-#include <SPI.h>;
 
-RH_ASK Radio(2000,2);
-
-
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  if(!Radio.init()){
-    Serial.println("NO");
-  }
-
+/*
+  433 MHz RF Module Receiver Demonstration 1
+  RF-Rcv-Demo-1.ino
+  Demonstrates 433 MHz RF Receiver Module
+  Use with Transmitter Demonstration 1
+ 
+  DroneBot Workshop 2018
+  https://dronebotworkshop.com
+*/
+ 
+// Include RadioHead Amplitude Shift Keying Library
+#include <RH_ASK.h>
+// Include dependant SPI Library 
+#include <SPI.h> 
+ 
+// Create Amplitude Shift Keying Object
+RH_ASK rf_driver;
+ 
+void setup()
+{
+    // Initialize ASK Object
+    rf_driver.init();
+    // Setup Serial Monitor
+    Serial.begin(9600);
 }
-
-void loop() {
-  // put your main code here, to run repeatedly:
-  uint8_t buf [RH_ASK_MAX_MESSAGE_LEN];
-  uint8_t buflen = sizeof(buf);
-
-  if(Radio.recv(buf,&buflen)){
-    int i;
-    String text="";
-    int j;
-
-  for(int j =0; j<buflen; j++){
-    text+=(char)(buf[j]);
-  }
-
-  Serial.println(text);
-  }
+ 
+void loop()
+{
+    // Set buffer to size of expected message
+    uint8_t buf[24];
+    uint8_t buflen = sizeof(buf);
+    // Check if received packet is correct size
+    if (rf_driver.recv(buf, &buflen))
+    {
+      
+      // Message received with valid checksum
+      Serial.print("Message Received: ");
+      Serial.println((char*)buf);         
+    }
 }
 
 //RECEIVER

@@ -1,29 +1,34 @@
+
+/*
+  433 MHz RF Module Transmitter Demonstration 1
+  RF-Xmit-Demo-1.ino
+  Demonstrates 433 MHz RF Transmitter Module
+  Use with Receiver Demonstration 1
+ 
+  DroneBot Workshop 2018
+  https://dronebotworkshop.com
+*/
+ 
 // Include RadioHead Amplitude Shift Keying Library
 #include <RH_ASK.h>
 // Include dependant SPI Library 
 #include <SPI.h> 
  
 // Create Amplitude Shift Keying Object
-RH_ASK Radio(2000,"",2);
+RH_ASK rf_driver;
  
 void setup()
 {
-  pinMode(13,OUTPUT);
-  Serial.begin(9600);
-  if(!Radio.init()){
-    Serial.println("BEUH");
-  }
+    // Initialize ASK Object
+    rf_driver.init();
 }
  
 void loop()
 {
-  const char *msg="HEY";
-
-  Radio.send((uint8_t *)msg, strlen(msg));
-  Radio.waitPacketSent();
-  digitalWrite(13, HIGH);
-  delay(100);
-  digitalWrite(13, LOW);
+    const char *msg = "Welcome to the Workshop!";
+    rf_driver.send((uint8_t *)msg, strlen(msg));
+    rf_driver.waitPacketSent();
+    delay(1000);
 }
 
 

@@ -14,6 +14,7 @@
 #include <Servo.h>
 #include <Arduino.h>
 #include <Wire.h>
+#include <string.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -35,22 +36,20 @@ String direccion = "";
 
 //char message[30] = "RELEASE:0:0"; //message to send receiver
 //Create Amplitude Shift Keying Object
-RH_ASK Radio(2000,"", 2);
+RH_ASK rf_driver;
 
 void setup() {
-  servo1.attach(10);//servo attachment position
-  servo1.write(90);//servo to 0 position
+//  servo1.attach(10);//servo attachment position
+//  servo1.write(90);//servo to 0 position
   Serial.begin(9600);//(console initiation)
-  if (!Radio.init()) {
-    Serial.println("FAILED!!");
-  }
+  rf_driver.init();
 }
 void loop() {
   messageFormat();
   //  char __message[sizeof(message)];
   //  message.toCharArray(__message, sizeof(__message));
-  Radio.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
-  Radio.waitPacketSent();
+  rf_driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
+  rf_driver.waitPacketSent();
   delay(5);
 }
 
@@ -58,7 +57,8 @@ void messageFormat() {
   //The format of the message: "DIRECTION(Forward, Backward, or Straight):SPEED:SERVOVALUE"
   speedRead();//speed of car, 0-150, sets carSpeed variable to speed
   servoPosition();//gives position of servo, sets servoPos variable to position
-  message=":"+carSpeeder+":"+servPosit;  
+//  message=":"+carSpeeder+":"+servPosit;
+  
   return;
 }
 

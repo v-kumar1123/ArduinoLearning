@@ -1,3 +1,5 @@
+#include <Adafruit_MotorShield.h>
+
 #include <RH_ASK.h>
 #include <SPI.h>
 //add the servo libary
