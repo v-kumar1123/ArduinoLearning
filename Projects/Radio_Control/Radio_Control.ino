@@ -50,7 +50,7 @@ void loop() {
   //  message.toCharArray(__message, sizeof(__message));
   rf_driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
   rf_driver.waitPacketSent();
-  delay(250);
+  delay(5);
 }
 
 void messageFormat() {
@@ -95,7 +95,7 @@ void directionDetermine() {
 
 void speedRead() {
   joyValY = analogRead(1);//y-position, will determine motor speed
-  int speed = map(1, 0, 1023, 0, 150); //maps JoystickW value to be from 0 to 150
+  int speed = map(joyValY, 0, 1023, 0, 150); //maps JoystickW value to be from 0 to 150
   speed = speed - 74; //sets speed value scaled
   speed *= 2; //multiply by 2 to increase speed
   carSpeed = abs(speed); //makes speed value to be defaultly positive

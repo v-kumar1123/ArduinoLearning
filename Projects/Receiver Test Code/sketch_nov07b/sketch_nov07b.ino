@@ -35,7 +35,7 @@ void loop()
     {
       
       // Message received with valid checksum
-      Serial.print("Message Received: ");
+      //Serial.print("Message Received: ");
       Serial.println((char*)buf);         
     }
 }
