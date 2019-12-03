@@ -11,13 +11,13 @@
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
 
-Servo servo1;
-
-RH_ASK Radio(2000,2);
+RH_ASK rf_driver;
 String text="";
 
 Servo servo1;
 int partCounter=0;
+int servoPos=0;
+int carSpeed=0;
 
 
 //THIS CLASS IS MADE TO RECEIVE DATA FROM THE TRANSMITTER AND CONVEY TO THE MOTORS AND STUFF....really formal language here amirite?
@@ -28,13 +28,11 @@ int partCounter=0;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  if(!Radio.init()) {
-    Serial.println("DID NOT INIT CORRECTLY");
-  }
+  rf_driver.init();
   servo1.attach(10);//servo attachment position (10 due to the motor shield)
   Wire.begin();
   AFMS.begin();//motorshield accessible
-  servo1.write(0);//servo to 0 position
+  servo1.write(90);//servo to 0 position
 }
 
 void loop() {
@@ -42,10 +40,9 @@ void loop() {
   uint8_t buf [RH_ASK_MAX_MESSAGE_LEN];
   uint8_t buflen = sizeof(buf);
 
-  if(Radio.recv(buf,&buflen)){
+  if(rf_driver.recv(buf,&buflen)){
     int i;
-    j;
-    partCounter=0;//This tells me to which part the program needs to go 
+    int j;//This tells me to which part the program needs to go 
 
   //if the colon is reached, stop the loop and send the text to the method that will assign the value to the part  
   for(j =0; j<buflen; j++){
@@ -58,18 +55,22 @@ void loop() {
     }
     text+=(char)(buf[j]);
   }
+
+  servo1.write(servoPos);
+  
+  myMotor -> setSpeed(carSpeed);
   //Serial.println(text);
   }
 }
 
 void partAssigner() {
-  if(partCounter==0) {
+  if(partCounter==2) {
       motorDirection();
   }
   else if(partCounter==1) {
       motorSpeed();
   }  
-  else if(partCounter==2) {
+  else if(partCounter==0) {
       servoAssign();
   }
 }
@@ -94,14 +95,14 @@ void motorDirection() {
 //Tells motor at what speed to move 
 void motorSpeed() {
   //takes int from speed string
-  int carSpeed=text.parseInt();
-  myMotor -> setSpeed(carSpeed);
+  carSpeed=text.toInt();
 }
 
 //Tells servo motor what direction to move
 void servoAssign() {
   //takes int from servo string
-  int servoPos=text.parseInt();
-  servo.write(servoPos);
+  servoPos=text.toInt();
+  
+  Serial.println(servoPos);
   
 }

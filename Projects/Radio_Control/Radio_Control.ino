@@ -64,11 +64,12 @@ void messageFormat() {
   msg.concat(":");
   msg.concat(servoPos);
   msg.concat(":");
-  msg.concat(direccion);
+  msg.concat(direccion);  
+  msg.concat(":");
 
-  char mess[80];
+  char mess[55];
 
-  msg.toCharArray(mess,90);
+  msg.toCharArray(mess,55);
 
   message=mess;
   
