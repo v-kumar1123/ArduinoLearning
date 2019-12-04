@@ -32,6 +32,9 @@ void setup() {
   servo1.attach(10);//servo attachment position (10 due to the motor shield)
   Wire.begin();
   AFMS.begin();//motorshield accessible
+//  servo1.write(75);
+//  delay(5000);
+//  servo1.write(120);
   servo1.write(90);//servo to 0 position
 }
 
@@ -41,6 +44,7 @@ void loop() {
   uint8_t buflen = sizeof(buf);
 
   if(rf_driver.recv(buf,&buflen)){
+    partCounter=0;
     int i;
     int j;//This tells me to which part the program needs to go 
 
@@ -48,30 +52,42 @@ void loop() {
   for(j =0; j<buflen; j++){
     if(buf[j]==':') {
       partCounter++;
+      if(partCounter==2){        
+        int pos=text.toInt();
+        servo1.write(pos);        
+      //Serial.println(pos);
+      }
+      if(partCounter==1){        
+        int spd=text.toInt();
+        myMotor->run(FORWARD);
+        myMotor->setSpeed(spd);
+      Serial.println(spd);
+      }
       partAssigner();//calls method that sets value
+      //Serial.println(text);
       text="";
       continue;
       
     }
     text+=(char)(buf[j]);
   }
-
-  servo1.write(servoPos);
+  
   
   myMotor -> setSpeed(carSpeed);
-  //Serial.println(text);
   }
+
+  //delay(5);
 }
 
 void partAssigner() {
-  if(partCounter==2) {
+  if(partCounter==3) {
       motorDirection();
   }
-  else if(partCounter==1) {
-      motorSpeed();
+  else if(partCounter==2) {
+      //motorSpeed();
   }  
-  else if(partCounter==0) {
-      servoAssign();
+  else if(partCounter==1) {
+      //servoAssign();
   }
 }
 
