@@ -48,7 +48,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   uint8_t buf [RH_ASK_MAX_MESSAGE_LEN];
   uint8_t buflen = sizeof(buf);
-  myMotor->setSpeed(spd);
+  myMotor->setSpeed(200);
 
   if(forward){
     myMotor->run(FORWARD);
@@ -81,13 +81,14 @@ void loop() {
       if(partCounter==1){        
         spd=text.toInt();
         //delay(5);
-        Serial.println(spd);
+        //Serial.println(spd);
       }
       if(partCounter==3) {
         motorDirection();
       }
       partAssigner();//calls method that sets value
-      //Serial.println(text);
+      Serial.println(text);
+      
       text="";
       continue;
       
@@ -96,21 +97,23 @@ void loop() {
   }
   
   
-  myMotor -> setSpeed(carSpeed);
+  //myMotor -> setSpeed(carSpeed);
   }
 
   //delay(5);
 }
 
 void motorTurner(int del) {
+  Serial.println(del+" I AM SAD");
   turner->setSpeed(200);
-  if(del>35) {
+  if(del>40) {
     turner->run(FORWARD);
-    delay(abs(35-del));
+    delay(abs(500));
   }
-  else if(del<35) {
+  else if(del<25) {
+    
     turner->run(BACKWARD);
-    delay(abs(35-del));
+    delay(abs(500));
   }
   turner->setSpeed(0);
 }
