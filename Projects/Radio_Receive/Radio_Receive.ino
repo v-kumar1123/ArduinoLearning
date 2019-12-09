@@ -10,6 +10,8 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
+Adafruit_DCMotor *turner = AFMS.getMotor(3);
+
 
 RH_ASK rf_driver;
 String text="";
@@ -73,7 +75,7 @@ void loop() {
       partCounter++;
       if(partCounter==2){        
         int pos=text.toInt();
-        servo1.write(pos);        
+        motorTurner(pos);      
       //Serial.println(pos);
       }
       if(partCounter==1){        
@@ -98,6 +100,19 @@ void loop() {
   }
 
   //delay(5);
+}
+
+void motorTurner(int del) {
+  turner->setSpeed(200);
+  if(del>35) {
+    turner->run(FORWARD);
+    delay(abs(35-del));
+  }
+  else if(del<35) {
+    turner->run(BACKWARD);
+    delay(abs(35-del));
+  }
+  turner->setSpeed(0);
 }
 
 void partAssigner() {

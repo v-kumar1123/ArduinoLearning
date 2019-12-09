@@ -105,8 +105,8 @@ void speedRead() {
 }
 
 void servoPosition() {
-    joyValX = analogRead(joyX);//x-position, determines servo direction
-    joyValX = map(joyValX, 5, 1023, 0, 170); //maps Joystick value to be from 0 to 180
+    joyValX = analogRead(joyX);//x-position, determines motor delay time
+    joyValX = map(joyValX, 0, 1023, 0, 70); //maps Joystick value to be from 0 to 70
     servoPos=joyValX;
     //return servoPosit;
 }
