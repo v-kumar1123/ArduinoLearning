@@ -50,7 +50,7 @@ void loop() {
   uint8_t buflen = sizeof(buf);
   myMotor->setSpeed(200);
 
-  if(forward){
+  /*if(forward){
     myMotor->run(FORWARD);
   }
   else if(backward) {
@@ -58,7 +58,7 @@ void loop() {
   }
   else if(stops){
     myMotor->run(RELEASE);
-  }
+  }*/
   
 
   if(rf_driver.recv(buf,&buflen)){
