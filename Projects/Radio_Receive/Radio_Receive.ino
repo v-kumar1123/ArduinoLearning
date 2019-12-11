@@ -15,11 +15,12 @@ Adafruit_DCMotor *turner = AFMS.getMotor(3);
 
 RH_ASK rf_driver;
 String text="";
-int spd;
+int spd=0;
 Servo servo1;
 int partCounter=0;
 int servoPos=0;
 int carSpeed=0;
+int joyValY=530;
 boolean forward=false;
 
 boolean backward=false;
@@ -43,51 +44,55 @@ void setup() {
 //  servo1.write(120);
   servo1.write(90);//servo to 0 position
 }
-
 void loop() {
   // put your main code here, to run repeatedly:
   uint8_t buf [RH_ASK_MAX_MESSAGE_LEN];
   uint8_t buflen = sizeof(buf);
-  myMotor->setSpeed(200);
+  //myMotor->setSpeed(120);
 
-  /*if(forward){
-    myMotor->run(FORWARD);
-  }
-  else if(backward) {
-    myMotor->run(BACKWARD);
-  }
-  else if(stops){
-    myMotor->run(RELEASE);
-  }*/
-  
+  speedRead();
+  Serial.println(joyValY);
 
+  myMotor->setSpeed(carSpeed);
+  if(joyValY>550){
+          //motor runs forward
+     myMotor->run(FORWARD);
+  }
+        //joystick at rest, not pushed backwards nor forward
+  if(joyValY>501&&joyValY<550){
+    //motor stops
+    myMotor->setSpeed(0);
+    myMotor->run(RELEASE);  
+    }
+        //joystick pushed backward
+    if(joyValY<501){
+    //motor runs backward
+          myMotor->run(BACKWARD);          
+    }
+        
   if(rf_driver.recv(buf,&buflen)){
-    
-    
-  
+    //myMotor->setSpeed(spd);
     partCounter=0;
     int i;
     int j;//This tells me to which part the program needs to go 
-
   //if the colon is reached, stop the loop and send the text to the method that will assign the value to the part  
   for(j =0; j<buflen; j++){
     if(buf[j]==':') {
       partCounter++;
-      if(partCounter==2){        
-        int pos=text.toInt();
-        motorTurner(pos);      
-      //Serial.println(pos);
+      if(partCounter==2) {//driving
+        //motorSpeed();
+        joyValY=text.toInt();
+        
       }
-      if(partCounter==1){        
-        spd=text.toInt();
-        //delay(5);
-        //Serial.println(spd);
+      if(partCounter==3){//turning        
+        //int pos=text.toInt();        
+        //motorTurner(pos);      
       }
-      if(partCounter==3) {
-        motorDirection();
+      if(partCounter==1) {
+        //motorDirection();
       }
-      partAssigner();//calls method that sets value
-      Serial.println(text);
+      //partAssigner();//calls method that sets value
+      //Serial.println(text);
       
       text="";
       continue;
@@ -100,11 +105,19 @@ void loop() {
   //myMotor -> setSpeed(carSpeed);
   }
 
-  //delay(5);
+  delay(5);
+}
+
+void speedRead() {
+  //joyValY = analogRead(1);//y-position, will determine motor speed
+  int speed = map(joyValY, 0, 1023, 0, 150); //maps JoystickY value to be from 0 to 150
+  speed = speed - 74; //sets speed value scaled
+  speed *= 2; //multiply by 2 to increase speed
+  carSpeed = abs(speed); //makes speed value to be defaultly positive
 }
 
 void motorTurner(int del) {
-  Serial.println(del+" I AM SAD");
+  //Serial.println(del+" I AM SAD");
   turner->setSpeed(200);
   if(del>40) {
     turner->run(FORWARD);
@@ -118,45 +131,26 @@ void motorTurner(int del) {
   turner->setSpeed(0);
 }
 
-void partAssigner() {
-  if(partCounter==3) {
-      motorDirection();
-  }
-  else if(partCounter==2) {
-      //motorSpeed();
-  }  
-  else if(partCounter==1) {
-      //servoAssign();
-  }
-}
-
 //Tells motor in what direction to move
-void motorDirection() {
+/*void motorDirection() {
   if(text.indexOf("FORWARD")>=0) {
-    //runs forward    
-    forward=true;
-    backward=false;
-    stops=false;
+   myMotor->run(FORWARD); 
+   return;
   }
   else if(text.indexOf("BACKWARD")>=0) {
-    //runs backward
-    forward=false;
-    backward=true;
-    stops=false;
+    myMotor->run(BACKWARD);
   }
   else if(text.indexOf("RELEASE")>=0) {
-    //motor stops, set speed to 0
-    myMotor->setSpeed(0); 
-    forward=false;
-    backward=false;
-    stops=true;
+    myMotor->setSpeed(0);
+    myMotor->run(RELEASE);
   }
 }
 
 //Tells motor at what speed to move 
 void motorSpeed() {
   //takes int from speed string
-  carSpeed=text.toInt();
+  int speedo=text.toInt();
+  myMotor -> setSpeed(speedo);
 }
 
 //Tells servo motor what direction to move
@@ -166,4 +160,4 @@ void servoAssign() {
   
   Serial.println(servoPos);
   
-}
+}*/

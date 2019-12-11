@@ -85,7 +85,7 @@ void directionDetermine() {
   //joystick at rest, not pushed backwards nor forward
   if (joyValY > 450 && joyValY < 550) {
     //motor stops
-    carSpeed = 0;
+    //carSpeed = 0;
     direccion="RELEASE";
   }
   //joystick pushed backward
