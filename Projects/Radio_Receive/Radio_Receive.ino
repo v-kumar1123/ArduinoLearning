@@ -104,6 +104,10 @@ void loop() {
   
   //myMotor -> setSpeed(carSpeed);
   }
+  else {
+    myMotor->setSpeed(0);
+    myMotor->run(RELEASE);
+  }
 
   //delay(5);
 }
