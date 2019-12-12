@@ -50,18 +50,16 @@ void loop() {
   //  message.toCharArray(__message, sizeof(__message));
   rf_driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
   rf_driver.waitPacketSent();
-  delay(5);
+  //delay(5);
 }
 
 void messageFormat() {
   //The format of the message: "DIRECTION(Forward, Backward, or Straight):SPEED:SERVOVALUE"
   speedRead();//speed of car, 0-150, sets carSpeed variable to speed
   servoPosition();//gives position of servo, sets servoPos variable to position
-  directionDetermine();//sets direction string
-
   String msg="";
-  
-  msg.concat(direccion);  
+
+  msg.concat("YEET");
   msg.concat(":");
   msg.concat(carSpeed);
   msg.concat(":");
@@ -78,26 +76,26 @@ void messageFormat() {
 }
 
 void directionDetermine() {
-  if (joyValY > 550) {
-    //motor runs forward
-    direccion= "FORWARD";
-  }
-  //joystick at rest, not pushed backwards nor forward
-  if (joyValY > 450 && joyValY < 550) {
-    //motor stops
-    carSpeed = 0;
-    direccion="RELEASE";
-  }
-  //joystick pushed backward
-  if (joyValY < 450) {
-    //motor runs backward
-    direccion="BACKWARD";
-  }
+  
 }
 
 void speedRead() {
   joyValY = analogRead(1);//y-position, will determine motor speed
-  carSpeed=joyValY;
+  if (joyValY > 550) {
+    //motor runs forward
+    carSpeed=1;
+  }
+  //joystick at rest, not pushed backwards nor forward
+  if (joyValY > 450 && joyValY < 550) {
+    //motor stops
+    carSpeed = 4;
+    
+  }
+  //joystick pushed backward
+  if (joyValY < 100) {
+    //motor runs backward
+    carSpeed=2;
+  }
 //  int speed = map(joyValY, 0, 1023, 0, 150); //maps JoystickW value to be from 0 to 150
 //  speed = speed - 74; //sets speed value scaled
 //  speed *= 2; //multiply by 2 to increase speed
@@ -108,7 +106,20 @@ void speedRead() {
 
 void servoPosition() {
     joyValX = analogRead(joyX);//x-position, determines motor delay time
-    joyValX = map(joyValX, 0, 1023, 0, 70); //maps Joystick value to be from 0 to 70
-    servoPos=joyValX;
+    if (joyValX > 550) {
+    //RIGHT
+    servoPos=1;
+  }
+  //joystick at rest, not pushed backwards nor forward
+  if (joyValX > 450 && joyValX < 550) {
+    //STRAIGHT
+    servoPos = 4;
+    
+    
+  }
+  if (joyValX < 450) {
+    //LEFT
+    servoPos=2;
+  }
     //return servoPosit;
 }

@@ -36,64 +36,64 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   rf_driver.init();
-  servo1.attach(10);//servo attachment position (10 due to the motor shield)
+  //servo1.attach(10);//servo attachment position (10 due to the motor shield)
   Wire.begin();
   AFMS.begin();//motorshield accessible
 //  servo1.write(75);
 //  delay(5000);
 //  servo1.write(120);
   servo1.write(90);//servo to 0 position
+  
+  turner->setSpeed(200);//turn speed to 200
+  myMotor->setSpeed(100);
+  myMotor->run(RELEASE);
 }
 void loop() {
   // put your main code here, to run repeatedly:
   uint8_t buf [RH_ASK_MAX_MESSAGE_LEN];
   uint8_t buflen = sizeof(buf);
-  //myMotor->setSpeed(120);
 
-  speedRead();
-  Serial.println(joyValY);
-
-  myMotor->setSpeed(carSpeed);
-  if(joyValY>550){
-          //motor runs forward
-     myMotor->run(FORWARD);
-  }
-        //joystick at rest, not pushed backwards nor forward
-  if(joyValY>501&&joyValY<550){
-    //motor stops
-    myMotor->setSpeed(0);
-    myMotor->run(RELEASE);  
-    }
-        //joystick pushed backward
-    if(joyValY<501){
-    //motor runs backward
-          myMotor->run(BACKWARD);          
-    }
-        
   if(rf_driver.recv(buf,&buflen)){
     //myMotor->setSpeed(spd);
     partCounter=0;
-    int i;
     int j;//This tells me to which part the program needs to go 
   //if the colon is reached, stop the loop and send the text to the method that will assign the value to the part  
   for(j =0; j<buflen; j++){
     if(buf[j]==':') {
       partCounter++;
-      if(partCounter==2) {//driving
-        //motorSpeed();
-        joyValY=text.toInt();
+      //1st carSpeed, 2nd turner
+      if(partCounter==2) {
+        int speede=text.toInt();
+        if(text.toInt()==4) {
+          stopp();
+        }
+        if(text.toInt()==1) {
+          forwardd();
+        }
         
+        if(text.toInt()==2) {
+          
+          myMotor->setSpeed(100);
+          myMotor->run(BACKWARD);
+        }
       }
-      if(partCounter==3){//turning        
-        //int pos=text.toInt();        
-        //motorTurner(pos);      
+      if(partCounter==3) {
+        partCounter=0;
+        //Serial.println("TURNER"+text.toInt());
+        if(text.toInt()==4) {
+          turner->run(RELEASE);
+        }
+        if(text.toInt()==1) {
+          turner->run(FORWARD);
+        }
+        
+        if(text.toInt()==2) {
+          turner->run(BACKWARD);
+        }
       }
-      if(partCounter==1) {
-        //motorDirection();
-      }
-      //partAssigner();//calls method that sets value
-      //Serial.println(text);
       
+      
+      Serial.println(text);
       text="";
       continue;
       
@@ -105,7 +105,15 @@ void loop() {
   //myMotor -> setSpeed(carSpeed);
   }
 
-  delay(5);
+  //delay(5);
+}
+void stopp() {
+  myMotor->setSpeed(0);
+  myMotor->run(RELEASE);
+}
+void forwardd() {
+  myMotor->setSpeed(100);
+  myMotor->run(FORWARD);
 }
 
 void speedRead() {
@@ -118,7 +126,6 @@ void speedRead() {
 
 void motorTurner(int del) {
   //Serial.println(del+" I AM SAD");
-  turner->setSpeed(200);
   if(del>40) {
     turner->run(FORWARD);
     delay(abs(500));
