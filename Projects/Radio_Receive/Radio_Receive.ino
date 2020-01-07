@@ -45,7 +45,7 @@ void setup() {
   servo1.write(90);//servo to 0 position
   
   turner->setSpeed(200);//turn speed to 200
-  myMotor->setSpeed(100);
+  myMotor->setSpeed(170);
   myMotor->run(RELEASE);
 }
 void loop() {
@@ -67,11 +67,11 @@ void loop() {
         if(text.toInt()==4) {
           stopp();
         }
-        if(text.toInt()==1) {
+        if(text.toInt()==2) {
           forwardd();
         }
         
-        if(text.toInt()==2) {
+        if(text.toInt()==1) {
           
           myMotor->setSpeed(100);
           myMotor->run(BACKWARD);
@@ -103,10 +103,6 @@ void loop() {
   
   
   //myMotor -> setSpeed(carSpeed);
-  }
-  else {
-    myMotor->setSpeed(0);
-    myMotor->run(RELEASE);
   }
 
   //delay(5);
