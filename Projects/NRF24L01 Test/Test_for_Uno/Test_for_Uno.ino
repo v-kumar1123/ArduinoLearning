@@ -1,26 +1,34 @@
-/*
-* Arduino Wireless Communication Tutorial
-*       Example 1 - Receiver Code
-*                
-* by Dejan Nedelkovski, www.HowToMechatronics.com
-* 
-* Library: TMRh20/RF24, https://github.com/tmrh20/RF24/
-*/
+//Include Libraries
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-RF24 radio(7, 8); // CE, CSN
+
+//create an RF24 object
+RF24 radio(9, 8);  // CE, CSN
+
+//address through which two modules communicate.
 const byte address[6] = "00001";
-void setup() {
-  Serial.begin(9600);
+
+void setup()
+{
+  while (!Serial);
+    Serial.begin(9600);
+  
   radio.begin();
+  
+  //set the address
   radio.openReadingPipe(0, address);
-  radio.setPALevel(RF24_PA_MIN);
+  
+  //Set module as receiver
   radio.startListening();
 }
-void loop() {
-  if (radio.available()) {
-    char text[32] = "";
+
+void loop()
+{
+  //Read the data if available in buffer
+  if (radio.available())
+  {
+    char text[32] = {0};
     radio.read(&text, sizeof(text));
     Serial.println(text);
   }
