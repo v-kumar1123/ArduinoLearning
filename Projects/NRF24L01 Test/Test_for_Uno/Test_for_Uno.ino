@@ -11,8 +11,7 @@ const byte address[6] = "00001";
 
 void setup()
 {
-  while (!Serial);
-    Serial.begin(9600);
+  Serial.begin(9600);
   
   radio.begin();
   
