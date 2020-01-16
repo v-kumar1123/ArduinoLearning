@@ -10,6 +10,8 @@
 
 #include <RH_ASK.h>
 #include <SPI.h>
+#include <nRF24L01.h>
+#include <RF24.h>
 //add the servo libary
 #include <Servo.h>
 #include <Arduino.h>
@@ -34,22 +36,28 @@ int carSpeed;
 String direccion = "";
 
 char *message = "RELEASE:0:0"; //message to send receiver
-//Create Amplitude Shift Keying Object
-RH_ASK rf_driver;
+//Create RF24 Obj
+RF24 radio(9, 8);  // CE, CSN
+
+const byte address[6] = "00001";
 
 void setup() {
 //  servo1.attach(10);//servo attachment position
 //  servo1.write(90);//servo to 0 position
   Serial.begin(9600);//(console initiation)
-  rf_driver.init();
+  radio.begin();
+  //set the address
+  radio.openWritingPipe(address);
+  
+  //Set module as transmitter
+  radio.stopListening();
 }
 void loop() {
   messageFormat();
   Serial.println(message);
   //  char __message[sizeof(message)];
   //  message.toCharArray(__message, sizeof(__message));
-  rf_driver.send((uint8_t/*byte*/ *)message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
-  rf_driver.waitPacketSent();
+  radio.write(message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
   //delay(5);
 }
 

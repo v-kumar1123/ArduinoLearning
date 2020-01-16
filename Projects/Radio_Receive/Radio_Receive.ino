@@ -6,14 +6,22 @@
 #include <Servo.h>
 #include <Arduino.h>
 #include <Wire.h>
+#include <nRF24L01.h>
+#include <RF24.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+
 Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
 Adafruit_DCMotor *turner = AFMS.getMotor(3);
 
 
-RH_ASK rf_driver;
+//create an RF24 object
+RF24 radio(9, 8);  // CE, CSN
+
+//address through which two modules communicate.
+const byte address[6] = "00001";
+
 String text="";
 int spd=0;
 Servo servo1;
@@ -35,7 +43,15 @@ boolean stops=false;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
-  rf_driver.init();
+
+  radio.begin();
+  
+  //set the address
+  radio.openReadingPipe(0, address);
+  
+  //Set module as receiver
+  radio.startListening();
+  //rf_driver.init();
   //servo1.attach(10);//servo attachment position (10 due to the motor shield)
   Wire.begin();
   AFMS.begin();//motorshield accessible
