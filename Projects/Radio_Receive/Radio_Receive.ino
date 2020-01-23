@@ -12,8 +12,8 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
-Adafruit_DCMotor *turner = AFMS.getMotor(3);
+Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *turner = AFMS.getMotor(1);
 
 
 //create an RF24 object
@@ -66,7 +66,10 @@ void setup() {
 }
 void loop() {
   // put your main code here, to run repeatedly:
-  uint8_t buf [RH_ASK_MAX_MESSAGE_LEN];
+    char buf[32] = {0};
+    radio.read(&buf, sizeof(buf));
+    Serial.println(buf);
+  
   uint8_t buflen = sizeof(buf);
 
   if(radio.available()){
