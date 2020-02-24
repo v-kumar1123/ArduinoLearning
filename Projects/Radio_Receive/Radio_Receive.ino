@@ -17,7 +17,7 @@ Adafruit_DCMotor *turner = AFMS.getMotor(1);
 
 
 //create an RF24 object
-RF24 radio(9, 8);  // CE, CSN
+RF24 radio(9, 10);  // CE, CSN; according to https://create.arduino.cc/projecthub/muhammad-aqib/nrf24l01-interfacing-with-arduino-wireless-communication-0c13d4
 
 //address through which two modules communicate.
 const byte address[6] = "00001";
