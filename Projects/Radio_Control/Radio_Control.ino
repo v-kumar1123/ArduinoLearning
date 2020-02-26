@@ -37,7 +37,7 @@ String direccion = "";
 
 char *message = "RELEASE:0:0"; //message to send receiver
 //Create RF24 Obj
-RF24 radio(9, 8);  // CE, CSN
+RF24 radio(9, 10);  // CE, CSN
 
 const byte address[6] = "00001";
 

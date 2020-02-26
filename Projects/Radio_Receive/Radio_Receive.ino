@@ -32,7 +32,6 @@ int joyValY=530;
 boolean forward=false;
 
 boolean backward=false;
-
 boolean stops=false;
 
 //THIS CLASS IS MADE TO RECEIVE DATA FROM THE TRANSMITTER AND CONVEY TO THE MOTORS AND STUFF....really formal language here amirite?
@@ -81,22 +80,21 @@ void loop() {
     if(buf[j]==':') {
       partCounter++;
       //1st carSpeed, 2nd turner
-      if(partCounter==2) {
+      if(partCounter==3) {
         int speede=text.toInt();
         if(text.toInt()==4) {
           stopp();
         }
         if(text.toInt()==2) {
-          forwardd();
-        }
-        
-        if(text.toInt()==1) {
-          
           myMotor->setSpeed(100);
           myMotor->run(BACKWARD);
         }
+        
+        if(text.toInt()==1) {
+          forwardd();
+        }
       }
-      if(partCounter==3) {
+      if(partCounter==2) {
         partCounter=0;
         //Serial.println("TURNER"+text.toInt());
         if(text.toInt()==4) {
