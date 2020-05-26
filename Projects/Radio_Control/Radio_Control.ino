@@ -73,7 +73,10 @@ void messageFormat() {
   msg.concat(":");
   msg.concat(servoPos);
   msg.concat(":");
-
+  msg.concat(analogRead(3));
+  msg.concat(":");
+  msg.concat(analogRead(4));
+  
   char mess[55];
 
   msg.toCharArray(mess,55);
@@ -82,6 +85,7 @@ void messageFormat() {
   
   return;
 }
+
 
 void directionDetermine() {
   
