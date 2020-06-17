@@ -61,17 +61,19 @@ void setup() {
   
   turner->setSpeed(200);//turn speed to 200
   myMotor->setSpeed(170);
-  myMotor->run(RELEASE);
 }
 void loop() {
   // put your main code here, to run repeatedly:
+    
+  
+
+  if(radio.available()){
     char buf[32] = {0};
     radio.read(&buf, sizeof(buf));
     Serial.println(buf);
-  
-  uint8_t buflen = sizeof(buf);
 
-  if(radio.available()){
+    
+  uint8_t buflen = sizeof(buf);
     //myMotor->setSpeed(spd);
     partCounter=0;
     int j;//This tells me to which part the program needs to go 
@@ -80,7 +82,8 @@ void loop() {
     if(buf[j]==':') {
       partCounter++;
       //1st carSpeed, 2nd turner
-      if(partCounter==3) {
+      if(partCounter==2) {
+        partCounter=0;
         int speede=text.toInt();
         if(text.toInt()==4) {
           stopp();
@@ -94,13 +97,14 @@ void loop() {
           forwardd();
         }
       }
-      if(partCounter==2) {
+      if(partCounter==3) {
         partCounter=0;
         //Serial.println("TURNER"+text.toInt());
         if(text.toInt()==4) {
           turner->run(RELEASE);
         }
         if(text.toInt()==1) {
+          Serial.println("OMG");
           turner->run(FORWARD);
         }
         
@@ -110,7 +114,7 @@ void loop() {
       }
       
       
-      Serial.println(text);
+      //Serial.println(text);
       text="";
       continue;
       
@@ -122,7 +126,7 @@ void loop() {
   //myMotor -> setSpeed(carSpeed);
   }
 
-  //delay(5);
+  delay(5);
 }
 void stopp() {
   myMotor->setSpeed(0);

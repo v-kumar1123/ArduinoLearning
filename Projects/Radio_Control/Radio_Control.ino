@@ -45,6 +45,9 @@ void setup() {
 //  servo1.attach(10);//servo attachment position
 //  servo1.write(90);//servo to 0 position
   Serial.begin(9600);//(console initiation)
+  
+  pinMode(2, INPUT);
+  digitalWrite(2, HIGH);
   radio.begin();
   //set the address
   radio.openWritingPipe(address);
@@ -58,7 +61,7 @@ void loop() {
   //  char __message[sizeof(message)];
   //  message.toCharArray(__message, sizeof(__message));
   radio.write(message/*makes message a byte*/, strlen(message)/*length of the String*/);//sends message to receiver
-  //delay(5);
+  delay(5);
 }
 
 void messageFormat() {
@@ -76,7 +79,9 @@ void messageFormat() {
   msg.concat(analogRead(3));
   msg.concat(":");
   msg.concat(analogRead(4));
-  
+  msg.concat(":");
+  msg.concat(digitalRead(2));
+  msg.concat(":");
   char mess[55];
 
   msg.toCharArray(mess,55);
