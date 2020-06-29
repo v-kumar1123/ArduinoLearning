@@ -12,12 +12,12 @@
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_DCMotor *myMotor = AFMS.getMotor(4);
-Adafruit_DCMotor *turner = AFMS.getMotor(1);
+Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
+Adafruit_DCMotor *turner = AFMS.getMotor(4);
 
 
 //create an RF24 object
-RF24 radio(9, 10);  // CE, CSN; according to https://create.arduino.cc/projecthub/muhammad-aqib/nrf24l01-interfacing-with-arduino-wireless-communication-0c13d4
+RF24 radio(10, 9);  // CE, CSN; according to https://create.arduino.cc/projecthub/muhammad-aqib/nrf24l01-interfacing-with-arduino-wireless-communication-0c13d4
 
 //address through which two modules communicate.
 const byte address[6] = "00001";
