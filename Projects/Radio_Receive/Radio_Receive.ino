@@ -17,7 +17,7 @@ Adafruit_DCMotor *turner = AFMS.getMotor(4);
 
 
 //create an RF24 object
-RF24 radio(10, 9);  // CE, CSN; according to https://create.arduino.cc/projecthub/muhammad-aqib/nrf24l01-interfacing-with-arduino-wireless-communication-0c13d4
+RF24 radio(7, 8);  // CE, CSN; according to https://create.arduino.cc/projecthub/muhammad-aqib/nrf24l01-interfacing-with-arduino-wireless-communication-0c13d4
 
 //address through which two modules communicate.
 const byte address[6] = "00001";
@@ -41,15 +41,6 @@ boolean stops=false;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
-
-  radio.begin();
-  
-  //set the address
-  radio.openReadingPipe(0, address);
-  
-  //Set module as receiver
-  radio.startListening();
   //rf_driver.init();
   //servo1.attach(10);//servo attachment position (10 due to the motor shield)
   Wire.begin();
@@ -61,6 +52,19 @@ void setup() {
   
   turner->setSpeed(200);//turn speed to 200
   myMotor->setSpeed(170);
+  Serial.begin(9600);
+
+  radio.begin();
+  
+  //set the address
+  radio.openReadingPipe(0, address);
+  
+  radio.setPALevel(RF24_PA_MIN);
+  
+  //Set module as receiver
+  radio.startListening();
+  
+  
 }
 void loop() {
   // put your main code here, to run repeatedly:

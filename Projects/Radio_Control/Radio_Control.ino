@@ -37,7 +37,7 @@ String direccion = "";
 
 char *message = "RELEASE:0:0"; //message to send receiver
 //Create RF24 Obj
-RF24 radio(9, 10);  // CE, CSN
+RF24 radio(7, 8);  // CE, CSN
 
 const byte address[6] = "00001";
 
@@ -97,7 +97,7 @@ void directionDetermine() {
 }
 
 void speedRead() {
-  joyValY = analogRead(1);//y-position, will determine motor speed
+  joyValY = analogRead(0);//y-position, will determine motor speed
   if (joyValY > 550) {
     //motor runs forward
     carSpeed=1;
@@ -122,7 +122,7 @@ void speedRead() {
 }
 
 void servoPosition() {
-    joyValX = analogRead(joyX);//x-position, determines motor delay time
+    joyValX = analogRead(2);//x-position, determines motor delay time
     if (joyValX > 550) {
     //RIGHT
     servoPos=1;
