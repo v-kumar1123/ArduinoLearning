@@ -70,8 +70,6 @@ void messageFormat() {
   servoPosition();//gives position of servo, sets servoPos variable to position
   String msg="";
 
-  msg.concat("YEET");
-  msg.concat(":");
   msg.concat(carSpeed);
   msg.concat(":");
   msg.concat(servoPos);
