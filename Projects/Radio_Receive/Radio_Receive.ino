@@ -86,7 +86,8 @@ void loop() {
     if(buf[j]==':') {
       partCounter++;
       //1st carSpeed, 2nd turner
-      if(partCounter==2) {
+      if(partCounter==1) {
+        text=buf[0];
         partCounter=0;
         int speede=text.toInt();
         if(text.toInt()==4) {
@@ -101,9 +102,10 @@ void loop() {
           forwardd();
         }
       }
-      if(partCounter==3) {
+      if(partCounter==2) {
         partCounter=0;
         //Serial.println("TURNER"+text.toInt());
+        text=buf[2];
         if(text.toInt()==4) {
           turner->run(RELEASE);
         }
